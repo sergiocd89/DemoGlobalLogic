@@ -1,0 +1,38 @@
+plugins {
+	id 'org.springframework.boot' version '2.1.9.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'java'
+}
+
+group = 'com.globallogic'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+dependencies {
+	testCompile group: 'com.h2database', name: 'h2', version: '1.4.199'
+}
+
+dependencies {
+	compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.6.Final'
+}
+
+dependencies {
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
+}
+
+dependencies {
+	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+}
+
+dependencies {
+	compile group: 'org.springframework.security', name: 'spring-security-core', version: '5.1.3.RELEASE'
+}
