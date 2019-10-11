@@ -10,13 +10,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.globallogic.controller.UsuarioGlobalLogicController;
 import com.globallogic.model.UsuarioRequest;
+import com.globallogic.util.Utilitario;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class DemogloballogicApplicationTests {
 
     @Autowired
-    private UsuarioGlobalLogicController usuarioGlobalLogicController;
+    private Utilitario utilitario;
     
 	@Test
 	public void contextLoads() {
@@ -27,7 +28,7 @@ public class DemogloballogicApplicationTests {
 		UsuarioRequest usuarioRequest = new UsuarioRequest();
 		usuarioRequest.setEmail("Sergiocd89@gmail.com");
 		usuarioRequest.setPassword("asdS12asd");
-		String respuesta = usuarioGlobalLogicController.validarDataCreacion(usuarioRequest);
+		String respuesta = utilitario.validarDataCreacion(usuarioRequest);
 		String respuestaEsperada = "OK";
 		assertEquals(respuestaEsperada , respuesta);
 	}
@@ -37,7 +38,7 @@ public class DemogloballogicApplicationTests {
 		UsuarioRequest usuarioRequest = new UsuarioRequest();
 		usuarioRequest.setEmail("Sergiocd89");
 		usuarioRequest.setPassword("asdS12asd");
-		String respuesta = usuarioGlobalLogicController.validarDataCreacion(usuarioRequest);
+		String respuesta = utilitario.validarDataCreacion(usuarioRequest);
 		String respuestaEsperada = "Formato de correo Incorrecto";
 		assertEquals(respuestaEsperada , respuesta);
 	}
@@ -47,7 +48,7 @@ public class DemogloballogicApplicationTests {
 		UsuarioRequest usuarioRequest = new UsuarioRequest();
 		usuarioRequest.setEmail("Sergiocd89@gmail.com");
 		usuarioRequest.setPassword("asd");
-		String respuesta = usuarioGlobalLogicController.validarDataCreacion(usuarioRequest);
+		String respuesta = utilitario.validarDataCreacion(usuarioRequest);
 		String respuestaEsperada = "Contrasenia no cumple los requisitos minimos (Una Mayuscula, letras minusculas, y dos numeros)";
 		assertEquals(respuestaEsperada , respuesta);
 	}
@@ -55,7 +56,7 @@ public class DemogloballogicApplicationTests {
 	@Test
 	public void validarCorreoOK() {
 		String mail ="Sergiocd89@gmail.com";
-		boolean respuesta = usuarioGlobalLogicController.validarCorreo(mail);
+		boolean respuesta = utilitario.validarCorreo(mail);
 		boolean respuestaEsperada = true;
 		assertEquals(respuesta , respuestaEsperada);
 	}
@@ -64,7 +65,7 @@ public class DemogloballogicApplicationTests {
 	@Test
 	public void validarCorreoNOK() {
 		String mail ="Sergiocd89";
-		boolean respuesta = usuarioGlobalLogicController.validarCorreo(mail);
+		boolean respuesta = utilitario.validarCorreo(mail);
 		boolean respuestaEsperada = false;
 		assertEquals(respuesta , respuestaEsperada);
 	}
@@ -72,7 +73,7 @@ public class DemogloballogicApplicationTests {
 	@Test
 	public void validarContraseniaOK() {
 		String password ="asd12asdF";
-		boolean respuesta = usuarioGlobalLogicController.validarContrasenia(password);
+		boolean respuesta = utilitario.validarContrasenia(password);
 		boolean respuestaEsperada = true;
 		assertEquals(respuesta , respuestaEsperada);
 	}
@@ -80,7 +81,7 @@ public class DemogloballogicApplicationTests {
 	@Test
 	public void validarContraseniaNOK() {
 		String password ="asdasdF";
-		boolean respuesta = usuarioGlobalLogicController.validarContrasenia(password);
+		boolean respuesta = utilitario.validarContrasenia(password);
 		boolean respuestaEsperada = false;
 		assertEquals(respuesta , respuestaEsperada);
 	}

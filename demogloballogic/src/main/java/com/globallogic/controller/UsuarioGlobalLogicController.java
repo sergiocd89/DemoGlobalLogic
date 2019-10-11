@@ -1,7 +1,7 @@
 package com.globallogic.controller;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.globallogic.model.UsuarioRequest;
 import com.globallogic.model.UsuarioResponse;
 import com.globallogic.service.UsuarioGlobalLogicService;
+import com.globallogic.util.Utilitario;
 
 @RestController
 @RequestMapping(path = "/usuario/globalLogic")
@@ -23,6 +24,9 @@ public class UsuarioGlobalLogicController {
 	@Autowired
 	UsuarioGlobalLogicService usuarioGlobalLogicService;
 
+	@Autowired
+	Utilitario utilitario;
+	
 	/*
 	 * Metodo Encargado de la creacion de un usuario
 	 * */
@@ -35,19 +39,21 @@ public class UsuarioGlobalLogicController {
 		System.out.println("***** [DemoGlobalLogicController] crearUsuario [INICIO] request ["+request.toString()+"]");
 		UsuarioResponse response = new UsuarioResponse();
 		try {
-			String respuestaValidacion = validarDataCreacion(request);
+			String respuestaValidacion = utilitario.validarDataCreacion(request);
 			System.out.println("***** [DemoGlobalLogicController] crearUsuario respuestaValidacion ["+ respuestaValidacion+"]");
 			if (respuestaValidacion.equals("OK")) {
 				response = usuarioGlobalLogicService.crearUsuario(request);
+				System.out.println("***** [DemoGlobalLogicController] crearUsuario [FIN] response["+response.toString()+"]");
 				return response;
 			}
 			else {
 				response.setMensaje(respuestaValidacion);
+				System.out.println("***** [DemoGlobalLogicController] crearUsuario [FIN] response["+response.toString()+"]");
 				return response;
 			}
 		} 
 		catch (Exception ex) {
-			System.out.println("***** [DemoGlobalLogicController] crearUsuario ex ["+ ex.getMessage() + "]");
+			System.out.println("***** [DemoGlobalLogicController] crearUsuario [FIN] ex ["+ ex.getMessage() + "]");
 			response.setMensaje("Excepcion " + ex.getMessage());
 			return response;
 		}
@@ -56,71 +62,80 @@ public class UsuarioGlobalLogicController {
 	/*
 	 * Metodo Encargado de la consulta de un usuario
 	 * */
-	@GetMapping("/{id}")
-	public @ResponseBody UsuarioResponse consultarUsuario(@PathVariable("id") String id) throws Exception {
-		System.out.println("***** [DemoGlobalLogicController] consultarUsuario [INICIO] request["+id+"]");
+	@GetMapping(value = "/consultar/{id}",
+			produces = "application/json")
+	public @ResponseBody UsuarioResponse consultar(@PathVariable(value="id") String idUsurio) throws Exception {
+		System.out.println("***** [DemoGlobalLogicController] consultar [INICIO] request["+idUsurio+"]");
 		UsuarioResponse response = new UsuarioResponse();
 		try {
-			String respuestaValidacion = validarDataConsulta(id);
-			System.out.println("***** [DemoGlobalLogicController] consultarUsuario respuestaValidacion ["+ respuestaValidacion+"]");
+			String respuestaValidacion = utilitario.validarDataConsulta(idUsurio);
+			System.out.println("***** [DemoGlobalLogicController] consultar respuestaValidacion ["+ respuestaValidacion+"]");
 			if (respuestaValidacion.equals("OK")) {
-				response = usuarioGlobalLogicService.consultaUsuario(UUID.fromString(id));
+				response = usuarioGlobalLogicService.consultaUsuario(UUID.fromString(idUsurio));
+				System.out.println("***** [DemoGlobalLogicController] consultar [FIN] response["+response.toString()+"]");
 				return response;
 			}
 			else {
 				response.setMensaje(respuestaValidacion);
+				System.out.println("***** [DemoGlobalLogicController] consultar [FIN] response["+response.toString()+"]");
 				return response;
 			}
 		} 
 		catch (Exception ex) {
-			System.out.println("***** [DemoGlobalLogicController] consultarUsuario ex ["+ ex.getMessage() + "]");
+			System.out.println("***** [DemoGlobalLogicController] consultar [FIN] ex ["+ ex.getMessage() + "]");
 			response.setMensaje("Excepcion " + ex.getMessage());
 			return response;
 		}
 	}
 
 	/*
-	 * Metodo encargado de la validacion de datos enviados en la creacion de usuarios
+	 * Metodo Encargado de la eliminacion de un usuario
 	 * */
-	public String validarDataCreacion(UsuarioRequest request) {
-		boolean respuestaValidaCorreo = validarCorreo(request.getEmail());
-		if (respuestaValidaCorreo == false) {
-			return "Formato de correo Incorrecto";
+	@GetMapping(value="/eliminar/{id}",
+			produces = "application/json")
+	public @ResponseBody UsuarioResponse eliminar(@PathVariable(value="id") String idUsurio)  throws Exception {
+		System.out.println("***** [DemoGlobalLogicController] eliminar [INICIO]");
+		UsuarioResponse response = new UsuarioResponse();
+		try {
+			String respuestaValidacion = utilitario.validarDataConsulta(idUsurio);
+			System.out.println("***** [DemoGlobalLogicController] eliminar respuestaValidacion ["+ respuestaValidacion+"]");
+			if (respuestaValidacion.equals("OK")) {
+				response = usuarioGlobalLogicService.eliminarUsuario(UUID.fromString(idUsurio));
+				System.out.println("***** [DemoGlobalLogicController] eliminar [FIN] response["+response.toString()+"]");
+				return response;
+			}
+			else {
+				response.setMensaje(respuestaValidacion);
+				System.out.println("***** [DemoGlobalLogicController] eliminar [FIN] response["+response.toString()+"]");
+				return response;
+			}
+		} 
+		catch (Exception ex) {
+			System.out.println("***** [DemoGlobalLogicController] eliminar [FIN] ex ["+ ex.getMessage() + "]");
+			response.setMensaje("Excepcion " + ex.getMessage());
+			return response;
 		}
-		boolean respuestaValidaContrasenia = validarContrasenia(request.getPassword());
-		if (respuestaValidaContrasenia == false) {
-			return "Contrasenia no cumple los requisitos minimos (Una Mayuscula, letras minusculas, y dos numeros)";
-		}
-		return "OK";
 	}
 
 	/*
-	 * Validacion de correo con patron
-	 * https://cesarg.cl/validacion-email-java/
+	 * Metodo Encargado de listar los usuarios
 	 * */
-	public boolean validarCorreo(String mail) {
-		Pattern pattern = Pattern.compile("^([0-9a-zA-Z]+[-._+&])*[0-9a-zA-Z]+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,6}$");
-		Matcher matcher = pattern.matcher(mail);
-		return matcher.matches();
-	}
-
-	/*
-	 * La contrasenia debe tener al entre 8 y 16 caracteres, al menos un digito, al menos una minuscula y al menos una mayuscula.
-	 * http://w3.unpocodetodo.info/utiles/regex-ejemplos.php?type=psw
-	 * */
-	public boolean validarContrasenia(String contrasenia) {
-		Pattern pattern = Pattern.compile("^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{8,16}$");
-		Matcher matcher = pattern.matcher(contrasenia);
-		return matcher.matches();
-	}
-
-	/*
-	 * Metodo encargado de la validacion de datos enviados en la consulta de usuarios
-	 * */
-	public String validarDataConsulta(String id) {
-		if (id == null) {
-			return "No existe Id";
+	@GetMapping(value = "/lista",
+			produces = "application/json")
+	public @ResponseBody List<UsuarioResponse> listar()  throws Exception{
+		System.out.println("***** [DemoGlobalLogicController] listar [INICIO]");
+		List<UsuarioResponse> responseLista = new ArrayList<UsuarioResponse>();
+		try {
+			responseLista = usuarioGlobalLogicService.listarUsuario();
+			System.out.println("***** [DemoGlobalLogicController] listar [FIN] response["+responseLista.toString()+"]");
+			return responseLista;
+		} 
+		catch (Exception ex) {
+			System.out.println("***** [DemoGlobalLogicController] listar [FIN] ex ["+ ex.getMessage() + "]");
+			UsuarioResponse response = new UsuarioResponse();
+			response.setMensaje("Excepcion " + ex.getMessage());
+			responseLista.add(response);
+			return responseLista;
 		}
-		return "OK";
 	}
 }

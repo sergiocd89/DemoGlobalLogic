@@ -32,8 +32,8 @@ public class UsuarioGlobalLogicServiceImpl implements UsuarioGlobalLogicService 
 	}
 
 	@Transactional
-	public void eliminarUsuario(UUID usuarioID){
-		usuarioGlobalLogicDAO.eliminarUsuario(usuarioID);
+	public UsuarioResponse eliminarUsuario(UUID usuarioID){
+		return usuarioGlobalLogicDAO.eliminarUsuario(usuarioID);
 	}
 
 	@Transactional

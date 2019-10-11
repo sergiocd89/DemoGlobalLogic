@@ -16,7 +16,7 @@ public interface UsuarioGlobalLogicDAO {
 	
 	public void editarUsuario(UsuarioRequest usuarioRequest);
 
-	public void eliminarUsuario(UUID usuarioID);
+	public UsuarioResponse eliminarUsuario(UUID usuarioID);
 
 	public UsuarioResponse consultaUsuario(UUID usuario);
 	

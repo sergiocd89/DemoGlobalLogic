@@ -3,6 +3,7 @@ package com.globallogic.dao.impl;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -28,7 +29,7 @@ public class UsuarioGlobalLogicDAOIMPL implements UsuarioGlobalLogicDAO {
 		SessionFactory sessionFactory = buildSessionFactory(UsuarioRequest.class);
 		Session session = sessionFactory.openSession();
 		try {
-			if (existeUsuario(usuario)) {
+			if (existeMail(usuario)) {
 				response.setMensaje("El correo ya esta registrado");
 				return response;
 			}
@@ -77,7 +78,6 @@ public class UsuarioGlobalLogicDAOIMPL implements UsuarioGlobalLogicDAO {
 		SessionFactory sessionFactory = buildSessionFactory(UsuarioRequest.class);
 		Session session = sessionFactory.openSession();
 		try {
-
 			UsuarioRequest saveUsuario = session.get(UsuarioRequest.class, usuario);
 
 			System.out.println("***** [UsuarioGlobalLogicDAOIMPL] consultaUsuario saveUsuario["+saveUsuario.toString()+"]");
@@ -104,9 +104,37 @@ public class UsuarioGlobalLogicDAOIMPL implements UsuarioGlobalLogicDAO {
 	}
 
 	/*
+	 * Metodo Encargado de la actualizacion de un usuario
+	 * */
+	@Override
+	public void editarUsuario(UsuarioRequest usuarioRequest) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/*
+	 * Metodo Encargado de la eliminacion de un usuario
+	 * */
+	@Override
+	public UsuarioResponse eliminarUsuario(UUID usuarioID) {
+		UsuarioResponse response = new UsuarioResponse();
+		response.setMensaje("Eliminacion realizada con exito");
+		return response;
+	}
+
+	/*
+	 * Metodo Encargado de listar todos los usuarios
+	 * */
+	@Override
+	public List listarUsuario() {
+		List<UsuarioResponse> responseLista = new ArrayList<UsuarioResponse>();
+		return responseLista;
+	}
+
+	/*
 	 * Metodo Encargado de la existencia de un usuario
 	 * */
-	public boolean existeUsuario(UsuarioRequest usuario){
+	public boolean existeMail(UsuarioRequest usuario){
 		System.out.println("***** [UsuarioGlobalLogicDAOIMPL] existeUsuario [INICIO] usuario["+usuario.toString()+"]");
 		SessionFactory sessionFactory = buildSessionFactory(UsuarioRequest.class);
 		Session session = sessionFactory.openSession();
@@ -123,35 +151,7 @@ public class UsuarioGlobalLogicDAOIMPL implements UsuarioGlobalLogicDAO {
 		System.out.println("***** [UsuarioGlobalLogicDAOIMPL] existeUsuario [FIN] respuesta["+respuesta+"]");
 		return respuesta;
 	}
-
-	/*
-	 * Metodo Encargado de la actualizacion de un usuario
-	 * */
-	@Override
-	public void editarUsuario(UsuarioRequest usuarioRequest) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/*
-	 * Metodo Encargado de la eliminacion de un usuario
-	 * */
-	@Override
-	public void eliminarUsuario(UUID usuarioID) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/*
-	 * Metodo Encargado de listar todos los usuarios
-	 * */
-	@Override
-	public List listarUsuario() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
+	
 	/*
 	 * Metodo Encargado de la creacion de la session
 	 * 
